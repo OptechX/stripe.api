@@ -25,7 +25,9 @@ jobs:
         shell: bash
 
       - name: 🗑️ Cleanup
-        run: rm -rf ./
+        run: |
+          rm -rf ./app
+          rm -rf ./lib
 
 
   if_error_or_failure:
