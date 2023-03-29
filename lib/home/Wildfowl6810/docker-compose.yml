@@ -7,7 +7,7 @@ networks:
     driver: bridge
 services:
   caddy:
-    image: "caddy:2.6.2-alpine"
+    image: "caddy:2.6.4-alpine"
     restart: unless-stopped
     ports:
       - "80:80"
@@ -28,7 +28,7 @@ services:
     networks:
       - internal
   nginx:
-    image: "nginx:1.23.3-alpine"
+    image: "nginx:1.23.4-alpine"
     restart: unless-stopped
     volumes:
       - /data/nginx:/usr/share/nginx/html
