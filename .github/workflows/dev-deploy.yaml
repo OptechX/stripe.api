@@ -19,7 +19,9 @@ jobs:
         env:
           SSH_USER: ${{ secrets.DEV_ENG_AU_OPTECHX_DATA_SSH_USER }}
           SSH_URL: ${{ secrets.DEV_ENG_AU_OPTECHX_DATA_URL }}
-        run: deploy.sh
+        run: |
+          chmod +x ./deploy.sh
+          ./deploy.sh
         shell: bash
 
       - name: 🗑️ Cleanup
