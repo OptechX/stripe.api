@@ -1,0 +1,37 @@
+version: "3.7"
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+    driver: bridge
+services:
+  caddy:
+    image: "caddy:2.6.2-alpine"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /data/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /data/caddy/data:/data
+      - /data/caddy/config:/config
+    networks:
+      - web
+      - internal
+    depends_on:
+      - api-users
+      - api-engine
+      - nginx
+  api-stripe:
+    image: "repasscloud/optechx.stripe.api.dev"
+    restart: unless-stopped
+    networks:
+      - internal
+  nginx:
+    image: "nginx:1.23.3-alpine"
+    restart: unless-stopped
+    volumes:
+      - /data/nginx:/usr/share/nginx/html
+    networks:
+      - internal

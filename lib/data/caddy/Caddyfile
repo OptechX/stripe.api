@@ -1,0 +1,46 @@
+{
+    # Global options block. Entirely optional, https is on by default
+    # Optional email key for lets encrypt
+    email hello@repasscloud.com
+    # Optional staging lets encrypt for testing. Comment out for production.
+    # acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+}
+eng-au.optechx-data.com {
+    reverse_proxy nginx:80
+    header {
+        # enable HSTS
+        Strict-Transport-Security max-age=31536000;
+        # disable clients from sniffing the media type
+        X-Content-Type-Options nosniff
+        # clickjacking protection
+        X-Frame-Options DENY
+        # keep referrer data off of HTTP connections
+        Referrer-Policy no-referrer-when-downgrade
+        # Content-Security-Policy: default-src 'self'
+    }
+}
+www.eng-au.optechx-data.com {
+    redir https://eng-au.optechx-data.com{uri}
+}
+stripe-dev.eng-au.optechx-data.com {
+    reverse_proxy api-stripe:4242
+    header {
+        # enable HSTS
+        Strict-Transport-Security max-age=31536000;
+        # disable clients from sniffing the media type
+        X-Content-Type-Options nosniff
+        # clickjacking protection
+        X-Frame-Options DENY
+        # keep referrer data off of HTTP connections
+        Referrer-Policy no-referrer-when-downgrade
+        # Content-Security-Policy: default-src 'self'
+
+        Access-Control-Allow-Origin *
+        Access-Control-Allow-Credentials true
+        Access-Control-Allow-Methods "OPTIONS,HEAD,GET,POST,PUT,PATCH,DELETE"
+        Access-Control-Allow-Headers *
+    }
+}
+www.stripe-dev.eng-au.optechx-data.com {
+    redir https://stripe-dev.eng-au.optechx-data.com{uri}
+}

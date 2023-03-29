@@ -1,0 +1,38 @@
+name: DEV ENG Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dev-eng-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v3
+
+      - name: 🔑 Create SSH Key
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.DEV_ENG_AU_OPTECHX_DATA_SSH_KEY }}
+
+      - name: 🖥️ Deploy to DEV-ENG Environment
+        env:
+          SSH_USER: ${{ secrets.DEV_ENG_AU_OPTECHX_DATA_SSH_USER }}
+          SSH_URL: ${{ secrets.DEV_ENG_AU_OPTECHX_DATA_URL }}
+        run: deploy.sh
+        shell: bash
+
+      - name: 🗑️ Cleanup
+        run: rm -rf ./
+
+
+  if_error_or_failure:
+    runs-on: ubuntu-latest
+    if: >-
+      github.event.state == 'error' ||
+      github.event.state == 'failure'
+    steps:
+      - env:
+          DESCRIPTION: ${{ github.event.description }}
+        run: |
+          echo The status is error or failed: $DESCRIPTION
